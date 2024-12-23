@@ -7,22 +7,24 @@ function generateContent() {
   const attendeesInput = document.getElementById('attendees').value.trim();
   const passersInput = document.getElementById('passers').value.trim();
   
+  // Initialize variables
+  let sessionLocalTime = "";
+  let endLocalTime = "";
+  
   // Combine date and time for session start
-  let sessionLocalTime = "N/A";
-  let sessionTimestamp = "N/A";
   if (sessionDate && sessionTime) {
     const sessionDateTime = new Date(`${sessionDate}T${sessionTime}`);
-    sessionTimestamp = Math.floor(sessionDateTime.getTime() / 1000); // Unix timestamp in seconds
-    sessionLocalTime = sessionDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (!isNaN(sessionDateTime.getTime())) {
+      sessionLocalTime = sessionDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
   }
   
   // Combine date and end time for session end
-  let endLocalTime = "N/A";
-  let endTimestamp = "N/A";
   if (sessionDate && endTime) {
     const endDateTime = new Date(`${sessionDate}T${endTime}`);
-    endTimestamp = Math.floor(endDateTime.getTime() / 1000); // Unix timestamp in seconds
-    endLocalTime = endDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (!isNaN(endDateTime.getTime())) {
+      endLocalTime = endDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
   }
   
   // Split attendees and passers by comma and trim spaces
@@ -36,43 +38,69 @@ function generateContent() {
     const groupShoutTrainingLocked = `TRAINING | Unfortunately, the ${sessionLocalTime} EST training has begun and the server has locked. If you couldn't make it, don’t fret as other trainings will be hosted.`;
     const groupShoutTrainingConcluded = `TRAINING | The training session has now concluded! Congratulations to everyone who passed, if you couldn't make it, don't fret as other trainings will be hosted.`;
     groupShoutTrainingFull = `${groupShoutTraining}\n\n${groupShoutTrainingLocked}\n\n${groupShoutTrainingConcluded}`;
+  } else if (username) {
+    const groupShoutTraining = `TRAINING | A training session is now being hosted by ${username}. Come on down to the training center for a chance to be promoted.`;
+    const groupShoutTrainingLocked = `TRAINING | Unfortunately, the training has begun and the server has locked. If you couldn't make it, don’t fret as other trainings will be hosted.`;
+    const groupShoutTrainingConcluded = `TRAINING | The training session has now concluded! Congratulations to everyone who passed, if you couldn't make it, don't fret as other trainings will be hosted.`;
+    groupShoutTrainingFull = `${groupShoutTraining}\n\n${groupShoutTrainingLocked}\n\n${groupShoutTrainingConcluded}`;
   } else {
     groupShoutTrainingFull = "Insufficient information to generate Group Shout - Training.";
   }
   
   // Generate Group Shout - Shift
   let groupShoutShiftFull = "";
-  if (username && sessionLocalTime) {
-    const groupShoutShift = `SHIFT | Greetings, everyone! A shift hosted by ${username} will be commencing down at the hotel at ${sessionLocalTime}. I hope to see you all there!`;
-    const groupShoutShiftEnded = endLocalTime !== "N/A" ? 
-      `SHIFT | My shift has officially concluded at ${endLocalTime}, thank you to those who attended! If you've missed the shift, do not fret as more will be hosted.` :
-      `SHIFT | My shift has officially concluded, thank you to those who attended! If you've missed the shift, do not fret as more will be hosted.`;
-    groupShoutShiftFull = `${groupShoutShift}\n\n${groupShoutShiftEnded}`;
+  if (username) {
+    if (sessionLocalTime) {
+      const groupShoutShift = `SHIFT | Greetings, everyone! A shift hosted by ${username} will be commencing down at the hotel at ${sessionLocalTime}. I hope to see you all there!`;
+      const groupShoutShiftEnded = endLocalTime ? 
+        `SHIFT | My shift has officially concluded at ${endLocalTime}, thank you to those who attended! If you've missed the shift, do not fret as more will be hosted.` :
+        `SHIFT | My shift has officially concluded, thank you to those who attended! If you've missed the shift, do not fret as more will be hosted.`;
+      groupShoutShiftFull = `${groupShoutShift}\n\n${groupShoutShiftEnded}`;
+    } else {
+      const groupShoutShift = `SHIFT | Greetings, everyone! A shift hosted by ${username} will be commencing down at the hotel. I hope to see you all there!`;
+      const groupShoutShiftEnded = endLocalTime ? 
+        `SHIFT | My shift has officially concluded at ${endLocalTime}, thank you to those who attended! If you've missed the shift, do not fret as more will be hosted.` :
+        `SHIFT | My shift has officially concluded, thank you to those who attended! If you've missed the shift, do not fret as more will be hosted.`;
+      groupShoutShiftFull = `${groupShoutShift}\n\n${groupShoutShiftEnded}`;
+    }
   } else {
     groupShoutShiftFull = "Insufficient information to generate Group Shout - Shift.";
   }
   
   // Generate Discord - Training
   let discordTraining = "";
-  if (username && sessionLocalTime) {
-    discordTraining = `**Training Session**
-    
+  if (username) {
+    if (sessionLocalTime) {
+      discordTraining = `**Training Session**
+      
 Greetings, everyone
 
-I am delighted to inform you all that a training being hosted by @${username} will be commencing in 15 minutes at the training center. We advise all Hotel Employees to attend to rank up. 
+I am delighted to inform you all that a training being hosted by @${username} will be commencing at ${sessionLocalTime} EST at the training center. We advise all Hotel Employees to attend to rank up. 
 
 Server One: https://www.roblox.com/games/5910536795/Maldivian-Resort-and-Spa-Training-Center
 
 @Sessions`;
+    } else {
+      discordTraining = `**Training Session**
+      
+Greetings, everyone
+
+I am delighted to inform you all that a training being hosted by @${username} will be commencing at the training center. We advise all Hotel Employees to attend to rank up. 
+
+Server One: https://www.roblox.com/games/5910536795/Maldivian-Resort-and-Spa-Training-Center
+
+@Sessions`;
+    }
   } else {
     discordTraining = "Insufficient information to generate Discord - Training.";
   }
   
   // Generate Discord - Shift
   let discordShift = "";
-  if (username && sessionLocalTime) {
-    discordShift = `HOTEL SHIFT
-
+  if (username) {
+    if (sessionLocalTime) {
+      discordShift = `HOTEL SHIFT
+    
 Hello, Maldivian! I am excited to inform you all that a shift being hosted by @${username} and co-hosted by N/A is now commencing at the hotel at ${sessionLocalTime}! Why not join for an opportunity to meet new people! Minigames and activities are possible.
 
 https://www.roblox.com/groups/8129727/Maldivian-Resort-and-Spa#!/about
@@ -80,6 +108,17 @@ https://www.roblox.com/groups/8129727/Maldivian-Resort-and-Spa#!/about
 [PROFILE LINK]
 
 @sessions`;
+    } else {
+      discordShift = `HOTEL SHIFT
+    
+Hello, Maldivian! I am excited to inform you all that a shift being hosted by @${username} and co-hosted by N/A is now commencing at the hotel! Why not join for an opportunity to meet new people! Minigames and activities are possible.
+
+https://www.roblox.com/groups/8129727/Maldivian-Resort-and-Spa#!/about
+
+[PROFILE LINK]
+
+@sessions`;
+    }
   } else {
     discordShift = "Insufficient information to generate Discord - Shift.";
   }
@@ -88,8 +127,8 @@ https://www.roblox.com/groups/8129727/Maldivian-Resort-and-Spa#!/about
   let shiftLog = "SHIFT LOG\n\n";
   if (username) shiftLog += `Username: ${username}\n`;
   if (sessionDate) shiftLog += `Date of Shift: ${sessionDate}\n`;
-  if (sessionLocalTime !== "N/A") shiftLog += `Time of Shift Start: ${sessionLocalTime}\n`;
-  if (endLocalTime !== "N/A") shiftLog += `Time of Shift End: ${endLocalTime}\n`;
+  if (sessionLocalTime) shiftLog += `Time of Shift Start: ${sessionLocalTime}\n`;
+  if (endLocalTime) shiftLog += `Time of Shift End: ${endLocalTime}\n`;
   if (attendees.length > 0) shiftLog += `Attendees: ${attendees.join(', ')}\n`;
   shiftLog += `Photo: \n`;
   
@@ -97,7 +136,7 @@ https://www.roblox.com/groups/8129727/Maldivian-Resort-and-Spa#!/about
   let trainingLog = "TRAINING LOG\n\n";
   if (username) trainingLog += `Host: ${username}\n`;
   trainingLog += `Co-Host: \n`; // Assuming Co-Host is not collected
-  if (sessionDate && sessionLocalTime !== "N/A") {
+  if (sessionDate && sessionLocalTime) {
     trainingLog += `Session Date and Time: ${sessionDate} ${sessionLocalTime} EST\n`;
   }
   if (passers.length > 0) trainingLog += `Passers: ${passers.join(', ')}\n`;
