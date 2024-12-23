@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Training & Shift Generator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Training & Shift Generator</h1>
+    
+    <form id="inputForm">
+      <fieldset>
+        <legend>User Information</legend>
+        
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+        
+        <label for="time">Time (e.g., 10:00 AM):</label>
+        <input type="text" id="time" name="time" required>
+        
+        <label for="am_pm">AM/PM:</label>
+        <select id="am_pm" name="am_pm" required>
+          <option value="AM">AM</option>
+          <option value="PM">PM</option>
+        </select>
+        
+        <!-- Add other input fields as necessary -->
+      </fieldset>
+      
+      <button type="button" onclick="generateContent()">Generate</button>
+    </form>
+    
+    <div id="output">
+      <h2>Generated Content</h2>
+      
+      <section>
+        <h3>Group Shout - Training</h3>
+        <pre id="groupShoutTraining"></pre>
+      </section>
+      
+      <section>
+        <h3>Group Shout - Shift</h3>
+        <pre id="groupShoutShift"></pre>
+      </section>
+      
+      <section>
+        <h3>Discord - Training</h3>
+        <pre id="discordTraining"></pre>
+      </section>
+      
+      <section>
+        <h3>Discord - Shift</h3>
+        <pre id="discordShift"></pre>
+      </section>
+      
+      <section>
+        <h3>Shift Log</h3>
+        <pre id="shiftLog"></pre>
+      </section>
+      
+      <section>
+        <h3>Training Log</h3>
+        <pre id="trainingLog"></pre>
+      </section>
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
