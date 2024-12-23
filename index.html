@@ -17,17 +17,20 @@
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
         
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required>
+        <label for="sessionDate">Session Date:</label>
+        <input type="date" id="sessionDate" name="sessionDate" required>
         
-        <label for="time">Time (e.g., 10:00 AM):</label>
-        <input type="text" id="time" name="time" required>
+        <label for="sessionTime">Session Time:</label>
+        <input type="time" id="sessionTime" name="sessionTime" required>
         
-        <label for="am_pm">AM/PM:</label>
-        <select id="am_pm" name="am_pm" required>
-          <option value="AM">AM</option>
-          <option value="PM">PM</option>
-        </select>
+        <label for="endTime">End Time:</label>
+        <input type="time" id="endTime" name="endTime" required>
+        
+        <label for="attendees">Attendees (separate by commas):</label>
+        <input type="text" id="attendees" name="attendees" placeholder="e.g., user1, user2, user3" required>
+        
+        <label for="passers">Passers (separate by commas):</label>
+        <input type="text" id="passers" name="passers" placeholder="e.g., user1, user2" required>
         
         <!-- Add other input fields as necessary -->
       </fieldset>
